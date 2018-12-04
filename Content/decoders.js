@@ -18,6 +18,7 @@ class Decoders {
         appointmentContent.setAttribute('form-type', type);
         appointmentContent.setAttribute('target', '_blank');
         appointmentContent.setAttribute('time', time);
+        appointmentContent.style.display = 'block';
         $(appointmentContent)
             .click(function () {
                 appointment.appoint(type, time);
@@ -45,7 +46,7 @@ class Decoders {
                     $types.append(this._getAppointmentDiv('irp', appointment.time, isPreset, 'https://burghquayregistrationoffice.inis.gov.ie/Website/AMSREG/AMSRegWeb.nsf/AppSelect?OpenForm&selected=true'));
                 }
             } else {
-                $types.append('<span class="no-valid">No valid</span>');
+                $types.append('<div class="no-valid">No valid</div>');
             }
 
             window.statusControl.removeLoading('irp');

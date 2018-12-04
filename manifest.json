@@ -25,7 +25,8 @@
             "Content/preset.js",
             "Content/form-storage.js",
             "Content/appointment.js",
-            "background.js"
+            "background.js",
+            "Content/moment.min.js"
         ]
       },
     "content_scripts": [{
@@ -41,7 +42,8 @@
             "Content/proxy.js",
             "Content/appointment-apis.js",
             "Content/appointment.js",
-            "Content/form-injected.js"
+            "Content/form-injected.js",
+            "Content/moment.min.js"
         ],
         "css": [
             "Content/form-injected.css"
@@ -51,5 +53,5 @@
     "web_accessible_resources": [
         "icon.png"
     ],
-    "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.gstatic.com/; object-src 'self'"
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.gstatic.com/ https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js; object-src 'self'"
 }
