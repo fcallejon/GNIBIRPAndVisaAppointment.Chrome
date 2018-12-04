@@ -18,7 +18,9 @@
     "background": {
         "scripts": [
             "Content/jquery-3.3.1.min.js",
-            "Content/dates.js",
+            "Content/irp-dates.js",
+            "Content/decoders.js",
+            "Content/status-control.js",
             "Content/appointment-apis.js",
             "Content/preset.js",
             "Content/form-storage.js",
@@ -33,7 +35,9 @@
             "Content/form-assistant.js",
             "Content/form-storage.js",
             "Content/preset.js",
-            "Content/dates.js",
+            "Content/irp-dates.js",
+            "Content/decoders.js",
+            "Content/status-control.js",
             "Content/proxy.js",
             "Content/appointment-apis.js",
             "Content/appointment.js",

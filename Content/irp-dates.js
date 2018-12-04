@@ -1,27 +1,31 @@
-var dates = {
-    today: new Date(),
-    
-    months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    irpSlotTimeFormat: 'day monthWord year - roundedHour:minute',
-    visaSlotTimeFormat: 'day/month/year hour:minute round',
-    serviceTimeFormat: 'month/day/year hour:minute:second round',
+class IRPDates {
+    constructor() {
+        this.today = new Date()
+        this.months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        this.irpSlotTimeFormat = 'day monthWord year - roundedHour:minute'
+        this.visaSlotTimeFormat = 'day/month/year hour:minute round'
+        this.serviceTimeFormat = 'month/day/year hour:minute:second round'
+        this.months31 = [1, 3, 5, 7, 8, 10, 12]
+        this.years = this._getNumberArray(this.today.getFullYear() + 4, 1875);
+    }
 
-    fromIRPSlotTime: function (slotTime) {
+
+    fromIRPSlotTime(slotTime) {
         var splits = slotTime.split(/[ :]/);
         var day = parseInt(splits[0]);
-        var month = dates.months.indexOf(splits[1]);
+        var month = this.months.indexOf(splits[1]);
         var year = parseInt(splits[2]);
         var hourRounded = parseInt(splits[3]);
         var minute = parseInt(splits[4]);
 
         return new Date(year, month, day, hourRounded, minute);
-    },
+    }
 
-    toIRPSlotTime: function (time) {
-        return dates.toFormattedTime(time, dates.irpSlotTimeFormat);
-    },
+    toIRPSlotTime(time) {
+        return this.toFormattedTime(time, this.irpSlotTimeFormat);
+    }
 
-    fromServiceTime: function (serviceTime) {
+    fromServiceTime(serviceTime) {
         var splits = serviceTime.split(/[/ :]/);
         var day = parseInt(splits[1]);
         var month = parseInt(splits[0] - 1);
@@ -31,20 +35,20 @@ var dates = {
         var second = parseInt(splits[5]);
         var round = splits[6] == 'AM' ? 0 : 12;
         return new Date(year, month, day, hour + round, minute, second);
-    },
+    }
 
-    toServiceTime: function (time) {
-        return dates.toFormattedTime(time, dates.serviceTimeFormat);
-    },
+    toServiceTime(time) {
+        return this.toFormattedTime(time, this.serviceTimeFormat);
+    }
 
-    toFormattedTime: function (time, format) {
+    toFormattedTime(time, format) {
         var toFixedHourMinute = function (number) {
             return number < 10 ? '0' + number : number;
         }
 
         var year = time.getFullYear();
         var month = time.getMonth() + 1;
-        var monthWord = dates.months[time.getMonth()];
+        var monthWord = this.months[time.getMonth()];
         var day = time.getDate();
         var roundedHour = toFixedHourMinute(time.getHours());
         var hour = toFixedHourMinute(roundedHour == 12 ? roundedHour : (roundedHour % 12));
@@ -53,19 +57,19 @@ var dates = {
         var second = toFixedHourMinute(time.getSeconds());
 
         return format
-        .replace('year', year)
-        .replace('monthWord', monthWord)
-        .replace('month', month)
-        .replace('day', day)
-        .replace('roundedHour', roundedHour)
-        .replace('hour', hour)
-        .replace('minute', minute)
-        .replace('second', second)
-        .replace('round', round);
-    },
+            .replace('year', year)
+            .replace('monthWord', monthWord)
+            .replace('month', month)
+            .replace('day', day)
+            .replace('roundedHour', roundedHour)
+            .replace('hour', hour)
+            .replace('minute', minute)
+            .replace('second', second)
+            .replace('round', round);
+    }
 
     //From DDMMYY, like 030418
-    fromShortDate: function (dateString) {
+    fromShortDate(dateString) {
         console.log('Date: ' + dateString);
         if (dateString.length) {
             var day = dateString.substring(0, 2);
@@ -76,52 +80,50 @@ var dates = {
         }
 
         return null;
-    },
+    }
 
-    getMonths: function (year) {
-        var getMonthsForYear= function (leap) {
+    getMonths(year) {
+        var getMonthsForYear = (leap) => {
             var yearMonthsName = (leap && 'leap' || 'normal') + 'YearMonths';
 
-            if (dates[yearMonthsName]) {
-                return dates[yearMonthsName];
+            if (this[yearMonthsName]) {
+                return this[yearMonthsName];
             }
 
-            var getMonthDays = function (daysNumber) {
-                return dates['month' + daysNumber] || (dates['month' + daysNumber] = dates._getDayNumberStringArray(1, daysNumber));
+            var getMonthDays = (daysNumber) => {
+                return this['month' + daysNumber] || (this['month' + daysNumber] = this._getDayNumberStringArray(1, daysNumber));
             }
 
             var months = {};
             for (var month = 1; month <= 12; month++) {
                 months[(month < 10 ? '0' : '') + month.toString()] =
-                    dates.months31.includes(month)
-                        && getMonthDays(31)
+                    this.months31.includes(month)
+                    && getMonthDays(31)
                     || month == 2 && getMonthDays(28 + (leap && 1))
                     || getMonthDays(30);
             }
 
-            return dates[yearMonthsName] = months;
+            return this[yearMonthsName] = months;
         }
 
         return (year % 4 || !(year % 100) && year % 400 || !(year % 3200))
-        && getMonthsForYear(false)
-        || getMonthsForYear(true);
-    },
+            && getMonthsForYear(false)
+            || getMonthsForYear(true);
+    }
 
-    months31: [1, 3, 5, 7, 8, 10, 12],
-
-    _getNumberArray: function (start, end) {
+    _getNumberArray(start, end) {
         var array = [];
-    
+
         for (var i = start;
             start < end && i <= end || start >= end && i >= end;
             i += start < end && 1 || -1) {
             array.push(i);
         }
-    
-        return array;
-    },
 
-    _getDayNumberStringArray: function (start, end) {
+        return array;
+    }
+
+    _getDayNumberStringArray(start, end) {
         var array = dates._getNumberArray(start, end);
         var newArray = [];
         for (var i in array) {
@@ -131,4 +133,6 @@ var dates = {
     }
 }
 
-dates.years = dates._getNumberArray(2020, 1875);
+// ugly partial fix for lack of export
+const dates = new IRPDates();
+window.dates = dates;

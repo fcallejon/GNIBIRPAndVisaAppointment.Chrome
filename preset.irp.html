@@ -8,7 +8,7 @@
     <script type="text/javascript" src="Bootstrap/bootstrap.min.js"></script>
     <link type="text/css" rel="stylesheet" href="Bootstrap/bootstrap.min.css" />
 
-    <script type="text/javascript" src="Content/dates.js"></script>
+    <script type="module" src="Content/irp-dates.js"></script>
     <script type="text/javascript" src="Content/irp.js"></script>
     <script type="text/javascript" src="Content/form-storage.js"></script>
     <script type="text/javascript" src="Content/form-assistant.js"></script>
@@ -23,7 +23,7 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
         <img class="logo" src="icon.png" />
-        GNIB / IRP & Visa Appointment
+        GNIB / IRP Appointment
     </nav>
 
     <div style="position: relative;">
@@ -51,11 +51,11 @@
             <tr>
                 <td>GNIB Expiry Date</td>
                 <td>
-                    <select id="GNIBExDTYY" source="dates.years" unselected-text="YYYY" dependee="ConfirmGNIB"
+                    <select id="GNIBExDTYY" source="window.dates.years" unselected-text="YYYY" dependee="ConfirmGNIB"
                         valid-when="ConfirmGNIB.checked" not-in-appointment></select>
-                    <select id="GNIBExDTMM" source="dates.getMonths(GNIBExDTYY.value)" unselected-text="MM" dependee="[ConfirmGNIB, GNIBExDTYY]"
+                    <select id="GNIBExDTMM" source="window.dates.getMonths(GNIBExDTYY.value)" unselected-text="MM" dependee="[ConfirmGNIB, GNIBExDTYY]"
                         valid-when="GNIBExDTYY.value" not-in-appointment></select>
-                    <select id="GNIBExDTDD" source="dates.getMonths(GNIBExDTYY.value)[GNIBExDTMM.value]"
+                    <select id="GNIBExDTDD" source="window.dates.getMonths(GNIBExDTYY.value)[GNIBExDTMM.value]"
                         unselected-text="DD" dependee="[ConfirmGNIB, GNIBExDTYY, GNIBExDTMM]" valid-when="GNIBExDTYY.value && GNIBExDTMM.value"
                         not-in-appointment></select>
                     <input id="GNIBExDT" type="hidden" dependee="[ConfirmGNIB, GNIBExDTDD, GNIBExDTMM, GNIBExDTYY]"
@@ -84,10 +84,10 @@
             <tr>
                 <td>Date of Birth</td>
                 <td>
-                    <select id="DOBYY" source="dates.years" unselected-text="YYYY" not-in-appointment></select>
-                    <select id="DOBMM" source="dates.getMonths(DOBYY.value)" unselected-text="MM" dependee="DOBYY"
+                    <select id="DOBYY" source="window.dates.years" unselected-text="YYYY" not-in-appointment></select>
+                    <select id="DOBMM" source="window.dates.getMonths(DOBYY.value)" unselected-text="MM" dependee="DOBYY"
                         valid-when="DOBYY.value" not-in-appointment></select>
-                    <select id="DOBDD" source="dates.getMonths(DOBYY.value)[DOBMM.value]" unselected-text="DD" dependee="[DOBYY, DOBMM]"
+                    <select id="DOBDD" source="window.dates.getMonths(DOBYY.value)[DOBMM.value]" unselected-text="DD" dependee="[DOBYY, DOBMM]"
                         valid-when="DOBYY.value && DOBMM.value" not-in-appointment></select>
                     <input id="DOB" type="hidden" dependee="[DOBDD, DOBMM, DOBYY]" calculated-value="DOBDD.value && DOBMM.value && DOBYY.value && [DOBDD.value, DOBMM.value, DOBYY.value].join('/')" />
                 </td>
@@ -134,10 +134,10 @@
             <tr>
                 <td>Closest to date:</td>
                 <td>
-                    <select id="CTDYY" source="dates.years" unselected-text="YYYY" not-in-appointment></select>
-                    <select id="CTDMM" source="dates.getMonths(CTDYY.value)" unselected-text="MM" dependee="CTDYY"
+                    <select id="CTDYY" source="window.dates.years" unselected-text="YYYY" not-in-appointment></select>
+                    <select id="CTDMM" source="window.dates.getMonths(CTDYY.value)" unselected-text="MM" dependee="CTDYY"
                         valid-when="CTDYY.value" not-in-appointment></select>
-                    <select id="CTDDD" source="dates.getMonths(CTDYY.value)[CTDMM.value]" unselected-text="DD" dependee="[CTDYY, CTDMM]"
+                    <select id="CTDDD" source="window.dates.getMonths(CTDYY.value)[CTDMM.value]" unselected-text="DD" dependee="[CTDYY, CTDMM]"
                         valid-when="CTDYY.value && CTDMM.value" not-in-appointment></select>
                     <input id="CTD" type="hidden" dependee="[CTDDD, CTDMM, CTDYY]" calculated-value="CTDDD.value && CTDMM.value && CTDYY.value && [CTDDD.value, CTDMM.value, CTDYY.value].join('/')" />
                 </td>

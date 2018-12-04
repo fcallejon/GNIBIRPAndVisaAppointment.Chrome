@@ -1,93 +1,4 @@
-class Decoders {
-
-    constructor () {
-        this.lists = {};
-    }
-
-    _getAppointmentDiv (type, time, isPreset, url) {
-        var appointmentElement = document.createElement('div');
-        appointmentElement.setAttribute('class', 'appointment');
-
-        var appointmentContent = isPreset
-        ? document.createElement('a')
-        : document.createElement('span');
-
-        appointmentContent.setAttribute('href', url);
-        appointmentContent.setAttribute('form-type', type);
-        appointmentContent.setAttribute('target', '_blank');
-        appointmentContent.setAttribute('time', time);
-        $(appointmentContent)
-            .click(function () {
-                appointment.appoint(type, time);
-                return false;
-            });
-
-        appointmentContent.innerHTML = time;
-        appointmentElement.appendChild(appointmentContent);
-
-        return appointmentElement;
-    }
-
-    irp (type, data) {
-        preset.getPreset(presets => {
-            const $list = this.lists['irp'] || (this.lists['irp'] = $('.irp'));
-            const $types = this.$getTypeGroup($list, type);
-
-            if (data.slots && data.slots.length && data.slots[0] != 'empty') {
-                var isPreset = presets.irp.Category
-                && presets.irp.ConfirmGNIB
-                && type == presets.irp.Category + '-' + presets.irp.ConfirmGNIB;
-                
-                for (var index in data.slots) {
-                    var appointment = data.slots[index];
-                    $types.append(this._getAppointmentDiv('irp', appointment.time, isPreset, 'https://burghquayregistrationoffice.inis.gov.ie/Website/AMSREG/AMSRegWeb.nsf/AppSelect?OpenForm&selected=true'));
-                }
-            } else {
-                $types.append('<span class="no-valid">No valid</span>');
-            }
-
-            statusControl.removeLoading('irp');
-        });
-    }
-
-    $getTypeGroup ($list, type) {
-        return $list.find('.' + type);
-
-        if (!$list.find('[type=' + type + ']').length) {
-            !$list.append('<div class="typegroup" type="' + type + '"><div class="type">' + type + '</div></div>');
-        }
-
-        return $list.find('[type=' + type + ']');
-    }
-}
-
-class StatusControl {
-    constructor () {
-        this.itemsCount = {};
-        this.loadings = {};
-    }
-    
-    addLoading (group) {
-        statusControl.loadings[group] = (statusControl.loadings[group] || 0) + 1;
-        statusControl.itemsCount[group] = (statusControl.itemsCount[group] || 0) + 1;
-    }
-
-    removeLoading (group) {
-        statusControl.loadings[group]--;
-
-        if (!statusControl.loadings[group]) {
-            var listSelector = '.' + group + 's .list';
-            $(listSelector + ' .loading').remove();
-
-            if (!$(listSelector + ' .appointment').length) {
-                $(listSelector).append('<div class="empty">There\'s no valid appointment.');
-            }
-        }
-    }
-}
-
-const decoders = new Decoders();
-const statusControl = new StatusControl();
+'use strict'
 
 $(document).ready(function () {    
     const oldAppoint = appointment.appoint;
@@ -112,7 +23,7 @@ $(document).ready(function () {
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.appointmentLoad == 'addLoading') {
-            statusControl.addLoading(request.group);
+            window.statusControl.addLoading(request.group);
         } else if (request.appointmentLoad == 'loaded') {
             if (request.group == 'irp') {
                 $('.progress-bar').width((++loaded + 1) /  (apiCount + 1) * 100 + '%');
@@ -124,7 +35,7 @@ $(document).ready(function () {
                     $('.progress-bar').removeClass('bg-primary').addClass('bg-success');
                 }
             }
-            decoders.irp(request.category, request.data);
+            window.decoders.irp(request.category, request.data);
         }
     });
 
