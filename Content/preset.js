@@ -1,109 +1,110 @@
 'use strict'
 
-var preset = {
-    isInitialized: false,
+class Preset {
+    constructor() {
+        this.isInitialized = false;
+        this.inputs = [];
+    }
 
-    inputs: [],
-
-    initialize: function () {
-        if (!preset.isInitialized) {
-            preset.isInitialized = true;
-
-            if ($('.form').attr('is-preset')) {
-                preset.initializePreset();
-        
-                $('.buttons .save').click(function () {
-                    var clicked = this;
-                    preset.save(function () {
-                        preset.presets && (delete preset.presets[preset.formType]);
-
-                        var backgroundPage = chrome.extension.getBackgroundPage();
-                        if (backgroundPage) {
-                            backgroundPage.preset.presets && (delete backgroundPage.preset.presets[preset.formType]);
-                        }
-
-                        if ($('.form').attr('form-save')) {
-                            eval($('.form').attr('form-save'));
-                        }
-                        else
-                        {
-                            window.location.href = clicked.getAttribute('href');
-                        }
-                    });
-
-                    return false;
-                });
-        
-                $('.buttons .clear').click(function () {
-                    preset.clear();
-                });
-            } else if (typeof autoForm != 'undefined') {
-                preset.initializeAppointment();
-            }
+    initialize() {
+        if (this.isInitialized) {
+            return;
         }
-    },
+        this.isInitialized = true;
 
-    initializePreset: function () {
-        preset.formType = $('.form').attr('form-type');
-        preset.storageKey = preset.formType + '-form-preset';
+        if ($('.form').attr('is-preset')) {
+            this.initializePreset();
+
+            $('.buttons .save').click(e => {
+                const clicked = e.target;
+                this.save(() => {
+                    this.presets && (delete this.presets[this.formType]);
+
+                    var backgroundPage = chrome.extension.getBackgroundPage();
+                    if (backgroundPage) {
+                        backgroundPage.preset.presets && (delete backgroundPage.preset.presets[this.formType]);
+                    }
+
+                    if ($('.form').attr('form-save')) {
+                        eval($('.form').attr('form-save'));
+                    }
+                    else {
+                        window.location.href = clicked.getAttribute('href');
+                    }
+                });
+
+                return false;
+            });
+
+            $('.buttons .clear').click(() => {
+                this.clear();
+            });
+        } else if (typeof autoForm != 'undefined') {
+            this.initializeAppointment();
+        }
+    }
+
+    initializePreset() {
+        this.formType = $('.form').attr('form-type');
+        this.storageKey = this.formType + '-form-preset';
 
         var $inputs = $('input, select');
 
         var setupCount = $inputs.length;
-        $inputs.each(function () {
-            preset.inputs.push(this);
-            
-            var dependee = eval(this.getAttribute('dependee'));
+        $inputs.each((i, input) => {
+            this.inputs.push(input);
 
-            this.hasAttribute('preload-source') && preset.setSelect(this);
-            
+            var dependee = eval(input.getAttribute('dependee'));
+
+            input.hasAttribute('preload-source') && this.setSelect(this);
+
             dependee
-            && (preset.setDependee(this, dependee) || true)
-            || this.nodeName == 'SELECT' && (preset.setSelect(this) || true)
-            || preset.setInput(this);
+                && (this.setDependee(input, dependee) || true)
+                || input.nodeName == 'SELECT' && (this.setSelect(input) || true)
+                || this.setInput(input);
 
-            preset.updateValue(this);
+            this.updateValue(input);
 
             if (!--setupCount) {
                 var url = new URL(window.location.href);
                 if (!url.searchParams.get('clear')) {
-                    preset.resumeForm(false);
+                    this.resumeForm(false);
                 }
             }
         });
-    },
+    }
 
-    initializeAppointment: function () {
-        autoForm.onTimeSet(function () {
-            preset.formType = autoForm.presetFormType;
-            preset.storageKey = preset.formType + '-form-preset';
-            
-            preset.resumeForm(true, function (set) {
-                set && formAssistant.applyScript('$(document.body).animate({ scrollTop: $(document).height() }, "slow");');
+    initializeAppointment() {
+        autoForm.onTimeSet(() => {
+            this.formType = autoForm.presetFormType;
+            this.storageKey = this.formType + '-form-preset';
+
+            this.resumeForm(true, set => {
+                set && formAssistant.applyScript('$(document.body).animate({ scrollTop: $(document).height() } "slow");');
                 autoForm.complete();
             });
         });
-    },
+    }
 
-    resumeForm: function (isAppointment, callback) {
-        formStorage.retrieve(preset.storageKey, function (formData) {
+    resumeForm(isAppointment, callback) {
+        formStorage.retrieve(this.storageKey, formData => {
             for (var index in formData) {
                 var inputData = formData[index];
                 if (isAppointment && inputData.inAppointment || !isAppointment) {
                     var input = document.getElementById(inputData.id);
 
-                    if (preset.isButton(input)) {
+                    if (this.isButton(input)) {
                         isAppointment
-                        ? formAssistant.applyScript('$(' + input.id + ').click();')
-                        : $(input).click();
+                            ? formAssistant.applyScript('$(' + input.id + ').click();')
+                            : $(input).click();
                     } else {
-                        if (preset.isCheckbox(input)) {
-                            input.checked = !preset.isValuedCheckbox(input) ? inputData.value : input.getAttribute('checked-value') == inputData.value;
-                        } else if (preset.isRadio(input)) {
+                        if (this.isCheckbox(input)) {
+                            input.checked = !this.isValuedCheckbox(input) ? inputData.value : input.getAttribute('checked-value') == inputData.value;
+                        } else if (this.isRadio(input)) {
                             input.checked = (typeof inputData.value != 'undefined') ? inputData.value : input.checked;
                         } else {
                             if ((input.id.indexOf('DD') >= 0 || input.id.indexOf('MM') >= 0)
-                                && inputData.value.length <2) {
+                                && inputData.value.length < 2) {
                                 inputData.value = '0' + inputData.value;
                             } else if ((input.id == 'DOB' || input.id == 'GNIBExDT') && input.value.length < 10) {
                                 var digits = inputData.value.split('/');
@@ -122,90 +123,90 @@ var preset = {
 
                             input.value = inputData.value
                         }
-                        
+
                         isAppointment
-                        ? formAssistant.applyScript('$(' + input.id + ').change();')
-                        : $(input).change()
+                            ? formAssistant.applyScript('$(' + input.id + ').change();')
+                            : $(input).change()
                     }
                 }
             }
 
             callback && callback(formData ? true : false);
         });
-    },
+    }
 
-    setSelect: function (select) {
-        preset.setSelectOptions(select);
-    },
+    setSelect(select) {
+        this.setSelectOptions(select);
+    }
 
-    setCheckboxValue: function (input, checkedValue, uncheckedValue) {
+    setCheckboxValue(input, checkedValue, uncheckedValue) {
         input.value = input.checked && checkedValue || uncheckedValue;
-    },
+    }
 
-    setInput: function (input) {
-        if (preset.isCheckbox(input)) {
+    setInput(input) {
+        if (this.isCheckbox(input)) {
             var checkedValue = input.getAttribute('checked-value');
             var uncheckedValue = input.getAttribute('unchecked-value');
 
-            preset.setCheckboxValue(input, checkedValue, uncheckedValue);
+            this.setCheckboxValue(input, checkedValue, uncheckedValue);
 
-            $(input).change(function () {
-                preset.setCheckboxValue(this, checkedValue, uncheckedValue);
+            $(input).change(() => {
+                this.setCheckboxValue(this, checkedValue, uncheckedValue);
             });
         }
-    },
+    }
 
-    isCheckbox: function (input) {
+    isCheckbox(input) {
         return input.nodeName == 'INPUT' && input.type == 'checkbox';
-    },
+    }
 
-    isRadio: function (input) {
+    isRadio(input) {
         return input.nodeName == 'INPUT' && input.type == 'radio';
-    },
+    }
 
-    isValuedCheckbox: function (input) {
-        return preset.isCheckbox(input) && input.hasAttribute('checked-value') && input.hasAttribute('unchecked-value');
-    },
+    isValuedCheckbox(input) {
+        return this.isCheckbox(input) && input.hasAttribute('checked-value') && input.hasAttribute('unchecked-value');
+    }
 
-    isButton: function (input) {
+    isButton(input) {
         return input.nodeName == 'BUTTON' || input.nodeName == 'INPUT' && input.type == 'button';
-    },
+    }
 
-    calculateValue: function (input) {
+    calculateValue(input) {
         input.value = input.hasAttribute('calculated-value')
-        ? eval(input.getAttribute('calculated-value'))
-        : input.value;
-    },
+            ? eval(input.getAttribute('calculated-value'))
+            : input.value;
+    }
 
-    updateValue: function (input) {
+    updateValue(input) {
         var select = input.nodeName == 'SELECT' && input;
         var validWhen = eval(input.getAttribute('valid-when'));
 
         if (validWhen || validWhen == null) {
             input.disabled = null;
-            select && preset.setSelectOptions(select);
-            preset.calculateValue(input);
+            select && this.setSelectOptions(select);
+            this.calculateValue(input);
         } else {
-            input.hasAttribute('always-calculate') && preset.calculateValue(input);
+            input.hasAttribute('always-calculate') && this.calculateValue(input);
             input.disabled = 'disable';
         }
-    },
+    }
 
-    setDependee: function (input, dependee) {
+    setDependee(input, dependee) {
         input.disabled = 'disabled';
-        $(dependee).change(function () {
-            preset.updateValue(input);
+        $(dependee).change(() => {
+            this.updateValue(input);
         });
-    },
+    }
 
-    setSelectOptions: function (select) {
+    setSelectOptions(select) {
         var source = eval(select.getAttribute('source'));
-        
+
         if (source != select.source) {
             var currentValue = select.value;
             select.options.length = 0;
 
-            var addOptionToSelect = function (value, text) {
+            var addOptionToSelect = (value, text) => {
                 var option = document.createElement('option');
                 option.value = value;
                 option.text = text;
@@ -223,13 +224,13 @@ var preset = {
 
             select.source = source;
         }
-    },
+    }
 
-    collectData: function () {
+    collectData() {
         var data = [];
         var marks = {};
 
-        var currentDependants = preset.inputs;
+        var currentDependants = this.inputs;
         while (Object.keys(currentDependants).length) {
             var newDependants = [];
 
@@ -239,89 +240,88 @@ var preset = {
                 var dependees = eval(dependant.getAttribute('dependee'));
                 dependees = dependees && !Array.isArray(dependees) && [dependees];
 
-                (!dependees || (function () {
+                (!dependees || (() => {
                     var allDependees = dependees.length;
 
                     for (var onIndex in dependees) {
                         var dependee = dependees[onIndex];
-                        
+
                         marks[dependee.id]
-                        && allDependees--;
+                            && allDependees--;
                     }
 
                     return !allDependees;
                 })())
-                && data.push({
-                    id: dependant.id,
-                    value: (preset.isCheckbox(dependant) && !preset.isValuedCheckbox(dependant) || preset.isRadio(dependant))
-                        ? dependant.checked
-                        : dependant.value,
-                    inAppointment: !dependant.hasAttribute('not-in-appointment')
-                })
-                && (marks[dependant.id] = true)
-                || newDependants.push(dependant);
+                    && data.push({
+                        id: dependant.id,
+                        value: (this.isCheckbox(dependant) && !this.isValuedCheckbox(dependant) || this.isRadio(dependant))
+                            ? dependant.checked
+                            : dependant.value,
+                        inAppointment: !dependant.hasAttribute('not-in-appointment')
+                    })
+                    && (marks[dependant.id] = true)
+                    || newDependants.push(dependant);
             }
 
             currentDependants = newDependants;
         }
 
         return data;
-    },
+    }
 
-    getPreset: function (callback) {
-        preset.presets
-        && preset.presets.irp && preset.presets.irp.loaded
-        && preset.presets.visa && preset.presets.visa.loaded
-        && preset.presets.notification && preset.presets.notification.loaded
-        ? callback(preset.presets)
-        : (function () {
-            if (!preset._getPresetCallbacks || !preset._getPresetCallbacks.length) {
-                preset._getPresetCallbacks = [callback];
-                preset.presets = {};
+    getPreset(callback) {
+        this.presets
+            && this.presets.irp && this.presets.irp.loaded
+            && this.presets.visa && this.presets.visa.loaded
+            && this.presets.notification && this.presets.notification.loaded
+            ? callback(this.presets)
+            : (() => {
+                if (!this._getPresetCallbacks || !this._getPresetCallbacks.length) {
+                    this._getPresetCallbacks = [callback];
+                    this.presets = {};
 
-                var retrieveData = function (key, callback) {
-                    preset.presets[key] = {};
-                    formStorage.retrieve(key + '-form-preset', function (data) {
-                        if (data) {
-                            data.forEach(inputData => {
-                                preset.presets[key][inputData.id] = inputData.value;
-                            });
-                            preset.presets[key].loaded = true;
-                        }
-                        callback();
-                    });
-                };
+                    var retrieveData = (key, callback) => {
+                        this.presets[key] = {};
+                        formStorage.retrieve(key + '-form-preset', (data) => {
+                            if (data) {
+                                data.forEach(inputData => {
+                                    this.presets[key][inputData.id] = inputData.value;
+                                });
+                                this.presets[key].loaded = true;
+                            }
+                            callback();
+                        });
+                    };
 
-                retrieveData('irp', function () {
-                    retrieveData('visa', function () {
-                        retrieveData('notification', function () {
+                    retrieveData('irp', () => {
+                        retrieveData('notification', () => {
                             var callback;
-                            while (callback = preset._getPresetCallbacks.shift()) {
-                                callback(preset.presets);
+                            while (callback = this._getPresetCallbacks.shift()) {
+                                callback(this.presets);
                             }
                         });
                     });
-                });
-            } else {
-                preset._getPresetCallbacks.push(callback);
-            }
-        }());
-    },
-   
-    save: function (callback) {
-        var data = preset.collectData();
-        formStorage.save(preset.storageKey, data, function () {
+                } else {
+                    this._getPresetCallbacks.push(callback);
+                }
+            })();
+    }
+
+    save(callback) {
+        var data = this.collectData();
+        formStorage.save(this.storageKey, data, () => {
             callback && callback();
         });
-    },
+    }
 
-    clear: function () {
+    clear() {
         var url = new URL(window.location.href);
         url.searchParams.set('clear', 'true');
         window.location.href = url;
     }
 }
 
-$(document).ready(function () {
-    preset.initialize();
+window.preset = new Preset();
+$(document).ready(() => {
+    window.preset.initialize();
 });
