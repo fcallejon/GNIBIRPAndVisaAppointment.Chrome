@@ -1,2 +1,2 @@
 appointment.initialize();
-notification.initialize();
+// notification.initialize();

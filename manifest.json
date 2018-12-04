@@ -7,8 +7,6 @@
         "https://*/*",
         "activeTab",
         "storage",
-        "gcm",
-        "notifications",
         "background"
     ],
     "icons": {
@@ -20,14 +18,11 @@
     },
     "background": {
         "scripts": [
-            "config.js",
-            "Content/facebook.sdk.js",
             "Content/jquery-3.3.1.min.js",
             "Content/dates.js",
             "Content/appointment-apis.js",
             "Content/preset.js",
             "Content/form-storage.js",
-            "Content/notification.js",
             "Content/appointment.js",
             "background.js"
         ]
@@ -37,7 +32,6 @@
         "js": [
             "Content/jquery-3.3.1.min.js",
             "Content/form-assistant.js",
-            "config.js",
             "Content/form-storage.js",
             "Content/preset.js",
             "Content/dates.js",
@@ -54,5 +48,5 @@
     "web_accessible_resources": [
         "icon.png"
     ],
-    "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.gstatic.com/ https://connect.facebook.net/; object-src 'self'"
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.gstatic.com/; object-src 'self'"
 }

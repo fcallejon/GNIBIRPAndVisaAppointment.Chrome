@@ -37,10 +37,14 @@ var appointment = {
         }
     },
 
-    getNewestAppointments: function (onApiLoading, onApiLoaded) {
-        var groups = ['irp', 'visa'];
+    getNewestAppointments: async function (onApiLoading, onApiLoaded) {
+        var groups = ['irp'];
         for (var groupIndex in groups) {
             var group = groups[groupIndex];
+            
+            const presets = await formStorage.retrieveItem(group + '-form-preset');
+            const ctd = presets.find(item => item.id === "CTD").value;
+
             for (var index in appointmentAPIs[group]) {
                 var appointmentAPI = appointmentAPIs[group][index];
 
@@ -48,8 +52,9 @@ var appointment = {
                 
                 (function (appointmentAPI, group, category) {
                     if (appointmentAPI.url) {
+                        const url = appointmentAPI.url + ctd;
                         var getter = group == 'irp' && proxy.get || $.get;
-                        getter(appointmentAPI.url, function (data) {
+                        getter(url, function (data) {
                             onApiLoaded(group, category, data);
                         });
                     } else {

@@ -1,149 +1,89 @@
 <html>
-    <head>
-        <script type="text/javascript" src="config.js"></script>
 
-        <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
-        <script type="text/javascript" src="Content/firebase.initialization.js"></script>
-        <script type="text/javascript" src="Content/jquery-3.3.1.min.js"></script>
-        <script type="text/javascript" src="Content/buy.js"></script>
+<head>
+    <script type="text/javascript" src="Content/jquery-3.3.1.min.js"></script>
 
-        <script type="text/javascript" src="Bootstrap/popper.min.js"></script>
-        <script type="text/javascript" src="Bootstrap/bootstrap.min.js"></script>
-        <link type="text/css" rel="stylesheet" href="Bootstrap/bootstrap.min.css" />
+    <script type="text/javascript" src="Bootstrap/popper.min.js"></script>
+    <script type="text/javascript" src="Bootstrap/bootstrap.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="Bootstrap/bootstrap.min.css" />
 
-        <script type="text/javascript" src="Content/dates.js"></script>
-        <script type="text/javascript" src="Content/appointment-apis.js"></script>
-        <script type="text/javascript" src="Content/form-storage.js"></script>
-        <script type="text/javascript" src="Content/form-assistant.js"></script>
-        <script type="text/javascript" src="Content/preset.js"></script>
-        <script type="text/javascript" src="Content/notification.js"></script>
-        <script type="text/javascript" src="Content/appointment.js"></script>
-        <script type="text/javascript" src="Content/tutorial.js"></script>
-        <link type="text/css" rel="stylesheet" href="Content/tutorial.css" />
-        <script type="text/javascript" src="Content/master.js"></script>
-        <link type="text/css" rel="stylesheet" href="Content/master.css" />
+    <script type="text/javascript" src="Content/dates.js"></script>
+    <script type="text/javascript" src="Content/appointment-apis.js"></script>
+    <script type="text/javascript" src="Content/form-storage.js"></script>
+    <script type="text/javascript" src="Content/form-assistant.js"></script>
+    <script type="text/javascript" src="Content/preset.js"></script>
+    <script type="text/javascript" src="Content/appointment.js"></script>
+    <script type="text/javascript" src="Content/master.js"></script>
+    <link type="text/css" rel="stylesheet" href="Content/master.css" />
 
-        <script type="text/javascript" src="Content/portal.js"></script>
-        <link type="text/css" rel="stylesheet" href="Content/portal.css" />
-    </head>
-    <body>
-        <script type="text/javascript" src="Content/facebook.sdk.js"></script>
+    <script type="text/javascript" src="Content/portal.js"></script>
+    <link type="text/css" rel="stylesheet" href="Content/portal.css" />
+</head>
 
-        <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
-            <a class="navbar-brand" href="http://gnibirpvisa.ie">
-                <img class="logo" src="icon.png" />
-                GNIB / IRP & Visa Appointment
-            </a>
-            <div class="my-lg-0">
-                <button class="btn btn-sm btn-outline-success tutorial-play" data-toggle="tooltip" data-placement="bottom" title="How to use this.">Tutorial</button>
-                <a class="btn btn-sm btn-outline-primary donate" data-toggle="tooltip" data-placement="bottom" title="This is an open source project." href="http:/gnibirpvisa.ie/Donate" target="_blank">Donate</a>
-            </div>
-        </nav>
-        
-        <h5 class="py-1 pr-2 text-right">GNIB / IRP</h5>
-        <div class="alert alert-success">
-            See appointments of <a href="http://gnibirpvisa.ie/Statistics/Appointment/Yesterday" target="_blank">Yesterday</a>!
-        </div>
-        <div class="progress" style="height: 5px">
-            <div class="progress-bar bg-danger" role="progressbar"></div>
-        </div>
-        <table class="irp table table-sm">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th scope="col">New</th>
-                    <th scope="col">Renewal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">Work</th>
-                    <td class="work-new"></td>
-                    <td class="work-renewal"></td>
-                </tr>
-                <tr>
-                    <th>Study</th>
-                    <td class="study-new"></td>
-                    <td class="study-renewal"></td>
-                </tr>
-                <tr>
-                    <th>Other</th>
-                    <td class="other-new"></td>
-                    <td class="other-renewal"></td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3">
-                        <div class="form-row align-items-left">
-                            <div class="col-auto">
-                                <a class="btn btn-success appoint" form-type="irp" href="https://burghquayregistrationoffice.inis.gov.ie/Website/AMSREG/AMSRegWeb.nsf/AppSelect?OpenForm">Appoint</a>
-                            </div>
-                            <div class="col-auto">
-                                <a class="btn btn-primary preset" target="_self" href="preset.irp.html">Preset</a>
-                            </div>
-                            <div class="col-auto my-2">
-                                <span class="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" class="custom-control-input notification-switch" notification-type="irp" id="turnOnNotification" />
-                                    <label class="custom-control-label" for="turnOnNotification">Notification</label>
-                                </span>
-                            </div>
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
+        <img class="logo" src="icon.png" />
+        GNIB / IRP & Visa Appointment
+    </nav>
+
+    <div class="progress" style="height: 5px">
+        <div class="progress-bar bg-danger" role="progressbar"></div>
+    </div>
+    <table class="irp table table-sm">
+        <thead>
+            <tr>
+                <th colspan="3">
+
+                </th>
+            </tr>
+            <tr>
+                <th></th>
+                <th scope="col">New</th>
+                <th scope="col">Renewal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Work</th>
+                <td class="work-new"></td>
+                <td class="work-renewal"></td>
+            </tr>
+            <tr>
+                <th>Study</th>
+                <td class="study-new"></td>
+                <td class="study-renewal"></td>
+            </tr>
+            <tr>
+                <th>Other</th>
+                <td class="other-new"></td>
+                <td class="other-renewal"></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">
+                    <div class="form-row align-items-left">
+                        <div class="col-auto">
+                            <a class="btn btn-success appoint" form-type="irp" href="https://burghquayregistrationoffice.inis.gov.ie/Website/AMSREG/AMSRegWeb.nsf/AppSelect?OpenForm">Appoint</a>
                         </div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-
-        <h5 class="py-1 pr-2 text-right">Visa</h5>
-        <table class="visa table table-sm">
-            <tbody>
-                <tr>
-                    <th scope="row">Emergency</th>
-                    <td class="emergency"></td>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <span class="badge badge-warning">Warning</span>
-                            <a href="http://www.inis.gov.ie/en/INIS/Pages/Re-entry+visas" target="_blank">Only emergency will be accepted from 3 Sep 2018.</a>
-                        </td>
-                    </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2">
-                        <div class="form-row align-items-left">
-                            <div class="col-auto">
-                                <a class="btn btn-success appoint" href="https://reentryvisa.inis.gov.ie/website/INISOA/IOA.nsf/AppointmentSelection?OpenForm">Appoint</a>
-                            </div>
-                            <div class="col-auto">
-                                <a class="btn btn-primary preset" target="_self" href="preset.visa.html">Preset</a>
-                            </div>
+                        <div class="col-auto">
+                            <a class="btn btn-primary preset" target="_self" href="preset.irp.html">Preset</a>
                         </div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 
-        <iframe class="proxy" set-src="https://burghquayregistrationoffice.inis.gov.ie/Website/AMSREG/AMSRegWeb.nsf/AppSelect?OpenForm&proxy=true"></iframe>
+    <iframe class="proxy" set-src="https://burghquayregistrationoffice.inis.gov.ie/Website/AMSREG/AMSRegWeb.nsf/AppSelect?OpenForm&proxy=true"></iframe>
 
-        <div class="fixed-bottom bg-light p-1">
-            <div class="row">
-                <div class="col-9">
-                    <a class="btn btn-link" href="http://gnibirpvisa.ie">GNIBIRPVisa.ie</a>
-                    |
-                    <a class="btn btn-link" href="https://www.facebook.com/gnibirpvisa/">Facebook Page</a>
-                </div>
-                <div class="col text-right">
-                    <!-- <a class="btn btn-sm btn-outline-info mt-1 shop" target="_self" href="shop.html">Shop</a> -->
-                </div>                
-            </div>
+    <div class="waiting">
+        <div class="alert alert-danger">
+            Don't close. Auto-filling your form from Preset.
         </div>
+        <img class="rounded mx-auto d-block" style="width: 200px" src="Content/loading.gif" />
+    </div>
+</body>
 
-        <div class="waiting">
-            <div class="alert alert-danger">
-                Don't close. Auto-filling your form from Preset.
-            </div>
-            <img class="rounded mx-auto d-block" style="width: 200px" src="Content/loading.gif" />
-        </div>
-    </body>
 </html>

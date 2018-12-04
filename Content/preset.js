@@ -226,7 +226,6 @@ var preset = {
     collectData: function () {
         var data = [];
         var marks = {};
-        var dependants = [];
 
         var currentDependants = preset.inputs;
         while (Object.keys(currentDependants).length) {
@@ -310,7 +309,6 @@ var preset = {
     save: function (callback) {
         var data = preset.collectData();
         formStorage.save(preset.storageKey, data, function () {
-            notification.resubscribe();
             callback && callback();
         });
     },
