@@ -128,22 +128,6 @@ $(document).ready(function () {
         }
     });
 
-    // appointment.getNewestAppointments(function (group) {
-    //     statusControl.addLoading(group);
-    // }, function (group, category, data) {
-    //     if (group == 'irp') {
-    //         $('.progress-bar').width((++loaded + 1) /  (apiCount + 1) * 100 + '%');
-    //         if (loaded == 2) {
-    //             $('.progress-bar').removeClass('bg-danger').addClass('bg-warning');
-    //         } if (loaded == 5) {
-    //             $('.progress-bar').removeClass('bg-warning').addClass('bg-primary');
-    //         } else if (loaded == 6) {
-    //             $('.progress-bar').removeClass('bg-primary').addClass('bg-success');
-    //         }
-    //     }
-    //     decoders[group](category, data);
-    // });
-
     $('iframe').each(function () {
         $(this).attr('src', $(this).attr('set-src'));
     });

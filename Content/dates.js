@@ -21,25 +21,6 @@ var dates = {
         return dates.toFormattedTime(time, dates.irpSlotTimeFormat);
     },
 
-    fromVisaSlotTime: function (slotTime) {
-        var day = parseInt(slotTime.substring(0, 2));
-        var month = parseInt(slotTime.substring(3, 5)) - 1;
-        var year = parseInt(slotTime.substring(6, 10));
-
-        if (slotTime.length > 10) {
-            var hour = parseInt(slotTime.substring(11, 13));
-            var minute = parseInt(slotTime.substring(14, 16));
-            var round = slotTime.substring(17, 19) == 'AM' ? 0 : 12;
-            return new Date(year, month, day, hour + round, minute);
-        }
-
-        return new Date(year, month, day);
-    },
-
-    toVisaSlotTime: function (time) {
-        return dates.toFormattedTime(time, dates.visaSlotTimeFormat);
-    },
-
     fromServiceTime: function (serviceTime) {
         var splits = serviceTime.split(/[/ :]/);
         var day = parseInt(splits[1]);
@@ -150,4 +131,4 @@ var dates = {
     }
 }
 
-dates.years = dates._getNumberArray(2020, 1875);
+dates.years = dates._getNumberArray(dates.today.getFullYear() + 4, 1875);

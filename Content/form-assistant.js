@@ -6,6 +6,6 @@ var formAssistant = {
     },
 
     run: function (run) {
-        formAssistant.applyScript('(run());'.replace('run', run.toString()));
+        formAssistant.applyScript(`(${run.toString()}());`);
     }
 }

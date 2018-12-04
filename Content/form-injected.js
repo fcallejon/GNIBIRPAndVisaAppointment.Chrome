@@ -45,7 +45,7 @@ var messageListener = function (request, sender, sendResponse) {
         autoForm.presetFormType = request.presetFormType;
         autoForm.selectedTime = request.selectedTime;
 
-        formAssistant.applyScript("var selectedTime = 'autoForm.selectedTime'".replace("autoForm.selectedTime", autoForm.selectedTime));
+        formAssistant.applyScript(`var selectedTime = '${autoForm.selectedTime}'`);
         autoForm.timeSet();
 
         sendResponse();
@@ -58,13 +58,13 @@ var messageListener = function (request, sender, sendResponse) {
 
 var url = new URL(window.location.href);
 if (url.searchParams.get('proxy')) {
-
-    appointment.getNewestAppointments(function (group) {
+    
+    appointment.getNewestAppointments(group => {
         chrome.runtime.sendMessage({
             appointmentLoad: 'addLoading',
             group: group
         });
-    }, function (group, category, data) {
+    }, (group, category, data) => {
         chrome.runtime.sendMessage({
             appointmentLoad: 'loaded',
             group: group,
@@ -114,7 +114,7 @@ if (url.searchParams.get('proxy')) {
             if (typeof btSrch4Apps != 'undefined') {
                 formAssistant.run(function () {
                     $(btSrch4Apps).click(function () {
-                        var interval; var hello;
+                        var interval;
     
                         selectedTime
                         && (interval = setInterval(function () {
