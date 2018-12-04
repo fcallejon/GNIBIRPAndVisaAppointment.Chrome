@@ -131,4 +131,4 @@ var dates = {
     }
 }
 
-dates.years = dates._getNumberArray(dates.today.getFullYear() + 4, 1875);
+dates.years = dates._getNumberArray(2020, 1875);
