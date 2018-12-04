@@ -132,14 +132,14 @@
                 </td>
             </tr>
             <tr>
-                <td>Closest to date:</td>
+                <td>Start from date:</td>
                 <td>
-                    <select id="CTDYY" source="window.dates.years" unselected-text="YYYY" not-in-appointment></select>
-                    <select id="CTDMM" source="window.dates.getMonths(CTDYY.value)" unselected-text="MM" dependee="CTDYY"
-                        valid-when="CTDYY.value" not-in-appointment></select>
-                    <select id="CTDDD" source="window.dates.getMonths(CTDYY.value)[CTDMM.value]" unselected-text="DD" dependee="[CTDYY, CTDMM]"
-                        valid-when="CTDYY.value && CTDMM.value" not-in-appointment></select>
-                    <input id="CTD" type="hidden" dependee="[CTDDD, CTDMM, CTDYY]" calculated-value="CTDDD.value && CTDMM.value && CTDYY.value && [CTDDD.value, CTDMM.value, CTDYY.value].join('/')" />
+                    <select id="SFDYY" source="window.dates.years" unselected-text="YYYY" not-in-appointment></select>
+                    <select id="SFDMM" source="window.dates.getMonths(SFDYY.value)" unselected-text="MM" dependee="SFDYY"
+                        valid-when="SFDYY.value" not-in-appointment></select>
+                    <select id="SFDDD" source="window.dates.getMonths(SFDYY.value)[SFDMM.value]" unselected-text="DD" dependee="[SFDYY, SFDMM]"
+                        valid-when="SFDYY.value && SFDMM.value" not-in-appointment></select>
+                    <input id="SFD" type="hidden" dependee="[SFDDD, SFDMM, SFDYY]" calculated-value="SFDDD.value && SFDMM.value && SFDYY.value && [SFDDD.value, SFDMM.value, SFDYY.value].join('/')" />
                 </td>
             </tr>
         </table>

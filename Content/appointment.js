@@ -43,7 +43,7 @@ var appointment = {
             var group = groups[groupIndex];
             
             const presets = await formStorage.retrieveItem(group + '-form-preset');
-            const ctd = presets.find(item => item.id === "CTD").value;
+            const sfd = presets.find(item => item.id === "SFD").value;
 
             for (var index in appointmentAPIs[group]) {
                 var appointmentAPI = appointmentAPIs[group][index];
@@ -52,7 +52,7 @@ var appointment = {
                 
                 (function (appointmentAPI, group, category) {
                     if (appointmentAPI.url) {
-                        const url = appointmentAPI.url + ctd;
+                        const url = appointmentAPI.url + sfd;
                         var getter = group == 'irp' && proxy.get || $.get;
                         getter(url, function (data) {
                             onApiLoaded(group, category, data);

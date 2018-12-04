@@ -150,8 +150,8 @@ class Preset {
 
             this.setCheckboxValue(input, checkedValue, uncheckedValue);
 
-            $(input).change(() => {
-                this.setCheckboxValue(this, checkedValue, uncheckedValue);
+            $(input).change(e => {
+                this.setCheckboxValue(e.target, checkedValue, uncheckedValue);
             });
         }
     }
